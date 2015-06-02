@@ -62,7 +62,7 @@ module DeepMerge
   #   dest   = {:x => [{:z => 2}]}
   #   dest.deep_merge!(source, {:merge_hash_arrays => true})
   #   Results: {:x => [{:y => 1, :z => 2}]}
-  # 
+  #
   # There are many tests for this library - and you can learn more about the features
   # and usages of deep_merge! by just browsing the test examples
   def self.deep_merge!(source, dest, options = {})
@@ -90,7 +90,11 @@ module DeepMerge
     if source.kind_of?(Hash)
       puts "#{di}Hashes: #{source.inspect} :: #{dest.inspect}" if merge_debug
       source.each do |src_key, src_value|
-        if dest.kind_of?(Hash)
+        if knockout_prefix && src_key.start_with?(DEFAULT_FIELD_KNOCKOUT_PREFIX)
+          key_to_remove = src_key.sub(DEFAULT_FIELD_KNOCKOUT_PREFIX, "")
+          dest.delete(key_to_remove)
+          nil
+        elsif dest.kind_of?(Hash)
           puts "#{di} looping: #{src_key.inspect} => #{src_value.inspect} :: #{dest.inspect}" if merge_debug
           if dest[src_key]
             puts "#{di} ==>merging: #{src_key.inspect} => #{src_value.inspect} :: #{dest[src_key].inspect}" if merge_debug
