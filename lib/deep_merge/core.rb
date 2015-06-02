@@ -90,7 +90,7 @@ module DeepMerge
     if source.kind_of?(Hash)
       puts "#{di}Hashes: #{source.inspect} :: #{dest.inspect}" if merge_debug
       source.each do |src_key, src_value|
-        if knockout_prefix && src_key.start_with?(DEFAULT_FIELD_KNOCKOUT_PREFIX)
+        if knockout_prefix && src_key.is_a?(String) && src_key.start_with?(DEFAULT_FIELD_KNOCKOUT_PREFIX)
           key_to_remove = src_key.sub(DEFAULT_FIELD_KNOCKOUT_PREFIX, "")
           dest.delete(key_to_remove)
           nil
